@@ -1,0 +1,54 @@
+// SPDX-License-Identifier: Apache-2.0
+
+pragma language_version >= 0.20;
+
+import CompactStandardLibrary;
+
+// -----------------------------
+// Public State (visible on-chain)
+// -----------------------------
+
+// Total number of resolutions recorded
+export ledger total_resolutions: Counter;
+
+
+// -----------------------------
+// Private State (hidden data)
+// -----------------------------
+
+// Private vote count for the latest resolution
+// (only provable to authorized parties like regulators)
+private ledger yes_votes: Counter;
+private ledger no_votes: Counter;
+
+
+// -----------------------------
+// Transition: Record Resolution
+// -----------------------------
+// Called when a board finishes voting
+export circuit record_resolution(
+  yes: UInt,
+  no: UInt
+): [] {
+
+  // Store vote counts privately
+  yes_votes.reset();
+  no_votes.reset();
+
+  yes_votes.increment(yes);
+  no_votes.increment(no);
+
+  // Publicly increment resolution count
+  total_resolutions.increment(1);
+}
+
+
+// -----------------------------
+// Transition: Reveal Outcome
+// -----------------------------
+// Called after disclosure deadline
+export circuit reveal_outcome(): [UInt, UInt] {
+
+  // Return vote counts when disclosure is allowed
+  return [yes_votes.value(), no_votes.value()];
+}
