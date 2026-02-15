@@ -1,3 +1,5 @@
+<img width="2547" height="1366" alt="image" src="https://github.com/user-attachments/assets/21929f92-be04-42b2-8bba-66f5677b446c" />
+
 <p align="center">
   <img src="https://midnight.network/img/midnight-logo.svg" alt="Midnight Network" width="200"/>
 </p>
